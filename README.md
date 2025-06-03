@@ -1,12 +1,75 @@
-# React + Vite
+# Secure Vault Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Welcome to Secure Vault Frontend, a robust web application designed for secure credential and sensitive information management. This application prioritizes security while maintaining user-friendly interactions.
 
-Currently, two official plugins are available:
+## What it Does
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Store and manage env files, API keys, and secure notes
 
-## Expanding the ESLint configuration
+## Security Features
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- Zero-knowledge encryption architecture
+- encryption for all stored data
+- Regular security audits and updates
+
+## Features
+
+- User authentication and authorization
+- Secure storage of credentials
+- Encrypted data handling
+
+## Technologies
+
+- React.js
+- TypeScript
+- Material-UI/Tailwind CSS
+- Axios for API communication
+- JWT Authentication
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v14 or higher)
+- npm or yarn
+
+### Installation
+
+1. Clone the repository
+```bash
+git clone https://github.com/yourusername/secure-vault-frontend.git
+```
+
+2. Install dependencies
+```bash
+cd secure-vault-frontend
+npm install
+```
+
+3. Start development server
+```bash
+npm start
+```
+
+## Configuration
+
+Create a `.env` file in the root directory:
+```
+REACT_APP_API_URL=your_backend_url
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch
+3. Commit your changes
+4. Push to the branch
+5. Open a Pull Request
+
+## License
+
+MIT License 
+
+## Security
+
+Please report security vulnerabilities to zeeshan.nvmx@gmail.com
