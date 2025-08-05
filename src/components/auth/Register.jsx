@@ -48,7 +48,7 @@ const Register = () => {
       return
     }
 
-    const { confirmPassword, ...userData } = formData
+    const { confirmPassword: _, ...userData } = formData
     const result = await register(userData)
 
     if (result.success) {
@@ -62,9 +62,10 @@ const Register = () => {
 
   return (
     <div className='auth-container'>
+      <h1 className='app-title'>Secrets Manager</h1>
       <div className='auth-card card'>
         <div className='card-header'>
-          <h1 className='card-title'>Create an account</h1>
+          <h2 className='card-subtitle'>Create an account</h2>
           <p className='card-description'>Enter your information to get started</p>
         </div>
         <div className='card-content'>

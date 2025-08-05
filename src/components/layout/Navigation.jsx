@@ -18,7 +18,7 @@ const Navigation = () => {
     <nav className='nav'>
       <div className='nav-container container'>
         <Link to='/dashboard' className='nav-brand'>
-          🔐 SecureVault
+          Secrets Manager
         </Link>
         <div className='nav-links'>
           <span className='text-sm'>

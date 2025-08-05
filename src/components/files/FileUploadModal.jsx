@@ -1,15 +1,30 @@
 // src/components/files/FileUploadModal.jsx
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import api from '../../services/api'
 
-const FileUploadModal = ({ onClose, onFileUploaded }) => {
+const FileUploadModal = ({ onClose, onFileUploaded, selectedProject = null }) => {
   const [file, setFile] = useState(null)
   const [filename, setFilename] = useState('')
   const [pin, setPin] = useState('')
+  const [projectId, setProjectId] = useState(selectedProject?._id || selectedProject?.id || '')
+  const [projects, setProjects] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [dragOver, setDragOver] = useState(false)
   const fileInputRef = useRef(null)
+
+  useEffect(() => {
+    loadProjects()
+  }, [])
+
+  const loadProjects = async () => {
+    try {
+      const response = await api.getProjects()
+      setProjects(response.data || [])
+    } catch (err) {
+      console.error('Failed to load projects:', err)
+    }
+  }
 
   const handleFileSelect = (selectedFile) => {
     setFile(selectedFile)
@@ -40,7 +55,8 @@ const FileUploadModal = ({ onClose, onFileUploaded }) => {
     setError('')
 
     try {
-      const response = await api.uploadFile(file, filename, pin)
+      const finalProjectId = projectId || null
+      const response = await api.uploadFile(file, filename, pin, finalProjectId)
       onFileUploaded(response.data)
     } catch (err) {
       setError(err.message)
@@ -93,6 +109,25 @@ const FileUploadModal = ({ onClose, onFileUploaded }) => {
                 Filename
               </label>
               <input type='text' id='filename' className='input' value={filename} onChange={(e) => setFilename(e.target.value)} placeholder='Enter filename' required />
+            </div>
+
+            <div className='form-group'>
+              <label htmlFor='project' className='label'>
+                Project (Optional)
+              </label>
+              <select
+                id='project'
+                className='input'
+                value={projectId}
+                onChange={(e) => setProjectId(e.target.value)}
+              >
+                <option value=''>No Project</option>
+                {projects.map((project) => (
+                  <option key={project._id || project.id} value={project._id || project.id}>
+                    {project.name}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div className='form-group'>

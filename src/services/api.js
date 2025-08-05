@@ -94,19 +94,40 @@ class ApiService {
   }
 
   // File endpoints
-  async getFiles() {
-    return this.request('/files')
+  async getFiles(filters = {}) {
+    const params = new URLSearchParams()
+    
+    if (filters.search) params.append('search', filters.search)
+    if (filters.project) params.append('project', filters.project)
+    if (filters.fileType) params.append('fileType', filters.fileType)
+    
+    const queryString = params.toString()
+    return this.request(`/files${queryString ? `?${queryString}` : ''}`)
+  }
+
+  async searchFiles(query) {
+    return this.request(`/files/search?q=${encodeURIComponent(query)}`)
+  }
+
+  async moveFiles(fileIds, projectId) {
+    return this.request('/files/move', {
+      method: 'PUT',
+      body: { fileIds, projectId },
+    })
   }
 
   async getFile(id, pin) {
     return this.request(`/files/${id}?pin=${pin}`)
   }
 
-  async uploadFile(file, filename, pin) {
+  async uploadFile(file, filename, pin, projectId = null) {
     const formData = new FormData()
     formData.append('file', file)
     formData.append('filename', filename)
     formData.append('pin', pin)
+    if (projectId) {
+      formData.append('projectId', projectId)
+    }
 
     return this.request('/files/upload', {
       method: 'POST',
@@ -114,10 +135,10 @@ class ApiService {
     })
   }
 
-  async createNote(filename, content, fileType, pin) {
+  async createNote(filename, content, fileType, pin, projectId = null) {
     return this.request('/files/note', {
       method: 'POST',
-      body: { filename, content, fileType, pin },
+      body: { filename, content, fileType, pin, projectId },
     })
   }
 
@@ -130,6 +151,36 @@ class ApiService {
 
   async deleteFile(id) {
     return this.request(`/files/${id}`, {
+      method: 'DELETE',
+    })
+  }
+
+  // Project endpoints
+  async getProjects(search = null) {
+    const queryString = search ? `?search=${encodeURIComponent(search)}` : ''
+    return this.request(`/projects${queryString}`)
+  }
+
+  async getProject(id) {
+    return this.request(`/projects/${id}`)
+  }
+
+  async createProject(projectData) {
+    return this.request('/projects', {
+      method: 'POST',
+      body: projectData,
+    })
+  }
+
+  async updateProject(id, updates) {
+    return this.request(`/projects/${id}`, {
+      method: 'PUT',
+      body: updates,
+    })
+  }
+
+  async deleteProject(id) {
+    return this.request(`/projects/${id}`, {
       method: 'DELETE',
     })
   }

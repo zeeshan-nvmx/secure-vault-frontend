@@ -38,9 +38,10 @@ const Login = () => {
 
   return (
     <div className='auth-container'>
+      <h1 className='app-title'>Secrets Manager</h1>
       <div className='auth-card card'>
         <div className='card-header'>
-          <h1 className='card-title'>Welcome back</h1>
+          <h2 className='card-subtitle'>Welcome back</h2>
           <p className='card-description'>Enter your credentials to access your account</p>
         </div>
         <div className='card-content'>

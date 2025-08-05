@@ -1,16 +1,31 @@
 // src/components/files/CreateNoteModal.jsx
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import api from '../../services/api'
 
-const CreateNoteModal = ({ onClose, onNoteCreated }) => {
+const CreateNoteModal = ({ onClose, onNoteCreated, selectedProject = null }) => {
   const [formData, setFormData] = useState({
     filename: '',
     content: '',
     fileType: 'txt',
     pin: '',
+    projectId: selectedProject?._id || selectedProject?.id || '',
   })
+  const [projects, setProjects] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+
+  useEffect(() => {
+    loadProjects()
+  }, [])
+
+  const loadProjects = async () => {
+    try {
+      const response = await api.getProjects()
+      setProjects(response.data || [])
+    } catch (err) {
+      console.error('Failed to load projects:', err)
+    }
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -30,7 +45,14 @@ const CreateNoteModal = ({ onClose, onNoteCreated }) => {
     setError('')
 
     try {
-      const response = await api.createNote(formData.filename, formData.content, formData.fileType, formData.pin)
+      const projectId = formData.projectId || null
+      const response = await api.createNote(
+        formData.filename,
+        formData.content,
+        formData.fileType,
+        formData.pin,
+        projectId
+      )
       onNoteCreated(response.data)
     } catch (err) {
       setError(err.message)
@@ -90,6 +112,26 @@ const CreateNoteModal = ({ onClose, onNoteCreated }) => {
                 rows={10}
                 required
               />
+            </div>
+
+            <div className='form-group'>
+              <label htmlFor='projectId' className='label'>
+                Project (Optional)
+              </label>
+              <select
+                id='projectId'
+                name='projectId'
+                className='input'
+                value={formData.projectId}
+                onChange={handleChange}
+              >
+                <option value=''>No Project</option>
+                {projects.map((project) => (
+                  <option key={project._id || project.id} value={project._id || project.id}>
+                    {project.name}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div className='form-group'>
